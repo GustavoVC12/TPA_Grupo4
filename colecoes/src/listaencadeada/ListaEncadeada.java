@@ -1,27 +1,43 @@
 package listaencadeada;
 
 // import colecao.IColecao;
+import colecao.IColecao;
+
 import java.util.Comparator;
 
-public class ListaEncadeada<T> implements IColecao {
+public class ListaEncadeada<T> implements IColecao<T> {
 
     private No<T> prim, ult;
     private int quantidade;
     private final boolean ordenada;
     private Comparator<T> comparador;
 
-    public ListaEncadeada(boolean ehOrdenada, Comparator<T> comparador) {
+    public ListaEncadeada(Comparator<T> comparador, boolean ehOrdenada) {
         this.prim = this.ult = null;
         this.quantidade = 0;
         this.ordenada = ehOrdenada;
         this.comparador = comparador;
     }
 
-    public void inserirElemento(T elem) {
-        if (this.ordenada == false)
-            inserirElementoNaoOrd(elem);
-        else
-            inserirElementoOrd(elem);
+    public No<T> getPrim() {
+        return prim;
+    }
+
+    public No<T> getUlt() {
+        return ult;
+    }
+
+    public boolean inserirElemento(T elem) {
+        try {
+            if (this.ordenada == false)
+                inserirElementoNaoOrd(elem);
+            else
+                inserirElementoOrd(elem);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     // A fazer: O slide da lista ordenada apenas cita o método 'inserirElementoNaoOrd(elem)',
@@ -83,14 +99,14 @@ public class ListaEncadeada<T> implements IColecao {
     }
 
     // Copiado e colado: "Buscar na Lista" (Adaptado Object para T)
-    public boolean contemElemento(T elem) {
+    public T contemElemento(T elem) {
         No<T> aux = this.prim;
         while (aux != null){
             if (aux.getValor().equals(elem))
-                return true;
+                return aux.getValor();
             aux = aux.getProx();
         }
-        return false;
+        return null;
     }
 
     // Copiado e colado: "Excluir da Lista" (Adaptado Object para T)
@@ -145,12 +161,12 @@ public class ListaEncadeada<T> implements IColecao {
     // ====================================================================================
 
     @Override
-    public void adicionar(T elemento) {
-        this.inserirElemento(elemento);
+    public boolean adicionar(T elemento) {
+        return this.inserirElemento(elemento);
     }
 
     @Override
-    public boolean pesquisar(T elemento) {
+    public T pesquisar(T elemento) {
         return this.contemElemento(elemento);
     }
 
