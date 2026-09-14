@@ -10,7 +10,7 @@ import listaencadeada.ListaEncadeada;
 public class Main {
     public static void main(String[] args) {
         IColecao<Contato> lista = null;
-        int ord = 0;
+        int ord;
 
         //criar lista escolhida
         do {
@@ -45,8 +45,10 @@ public class Main {
                     "5 - Remover contato por telefone\n" +
                     "6 - Alterar dados de contato\n" +
                     "7 - Sair\n" +
+                    "====== Métodos para simplificar os testes ======\n" +
                     "8 - Imprimir lista\n" +
-                    "9 - Gerar dados");
+                    "9 - Gerar dados\n" +
+                    "10 - Último contato");
             escolha = Utilidades.lerInt("Sua escolha: ");
             switch(escolha){
                 case 1: // Carregar dados
@@ -88,6 +90,9 @@ public class Main {
                 case 9:
                     int contatos = Utilidades.lerInt("Quantidade de contatos: ");
                     GeradorDados.gerar(contatos);
+                    break;
+                case 10:
+                    Sistema.ultimoContato(lista);
                     break;
                 default:
                     System.out.println("Escolha uma das opções!");

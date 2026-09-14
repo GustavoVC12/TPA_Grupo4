@@ -43,7 +43,6 @@ public class Sistema {
             }
             System.out.println("Lista carregada!");
         } catch (IOException e) {
-            fim = Instant.now();
             System.out.println("Ocorreu um erro ao carregar a lista.");
         }
         fim = Instant.now();
@@ -137,8 +136,8 @@ public class Sistema {
         Instant fim = Instant.now();
         return new Resultado(removido, Duration.between(inicio,fim).toMillis());
     }
-    public static boolean removerContatoPorTelefone(IColecao<Contato> lista, Contato contato) {
-        return lista.remover(contato);
+    public static void removerContatoPorTelefone(IColecao<Contato> lista, Contato contato) {
+        lista.remover(contato);
     }
 
     // Atualizar contato da lista
@@ -166,5 +165,11 @@ public class Sistema {
 
     public static boolean contatoExiste(IColecao<Contato> l, Contato c) {
         return l.pesquisar(c) != null;
+    }
+
+    public static void ultimoContato(IColecao<Contato> l) {
+        ListaEncadeada<Contato> lAux = (ListaEncadeada<Contato>) l;
+        Contato ult = lAux.getUlt().getValor();
+        System.out.println("Último contato: " + ult.getNome() + " - " + ult.getTelefone());
     }
 }
