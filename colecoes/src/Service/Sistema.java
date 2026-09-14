@@ -172,4 +172,18 @@ public class Sistema {
         Contato ult = lAux.getUlt().getValor();
         System.out.println("Último contato: " + ult.getNome() + " - " + ult.getTelefone());
     }
+
+    public static void excluirDados(IColecao<Contato> l) {
+        ListaEncadeada<Contato> listaAux = (ListaEncadeada<Contato>) l;
+        No<Contato> aux = listaAux.getPrim();
+        if (aux == null) {
+            System.out.println("Lista estava vazia.");
+            return;
+        }
+        while (aux != null){
+            removerContatoPorTelefone(l, aux.getValor());
+            aux = aux.getProx();
+        }
+        System.out.println("Lista esvaziada.");
+    }
 }

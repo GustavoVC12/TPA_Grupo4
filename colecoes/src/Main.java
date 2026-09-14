@@ -53,7 +53,11 @@ public class Main {
             switch(escolha){
                 case 1: // Carregar dados
                     if(jaCarregado){
-                        System.out.println("Os dados do arquivo já foram carregados.");
+                        System.out.println("A lista já foi carregada. Outro carregamento substituirá os dados atuais.");
+                        if (Utilidades.lerInt("Deseja continuar? (sim=1 / não=2)") == 2) {
+                            break;
+                        }
+                        Sistema.excluirDados(lista);
                     }
                     Sistema.carregarDados(lista);
                     jaCarregado = true;
