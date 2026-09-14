@@ -9,6 +9,7 @@ o número de contatos desejado.
 3 - Após a geração dos contatos, carregue os contatos na lista
 (opção 1).
 
+O arquivo entrada.txt já possui 100.000 contatos.
 
 Não é necessário exluir o arquivo de contatos caso deseje trocar.
 Basta gerar e carregar os dados novamente através do menu.
