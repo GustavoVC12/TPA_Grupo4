@@ -11,7 +11,4 @@ o número de contatos desejado.
 
 
 Não é necessário exluir o arquivo de contatos caso deseje trocar.
-Basta gerar os dados novamente através do menu.
-
-OBS: carregar a lista múltiplas vezes em uma mesma execução do sistema
-não apagará os dados existentes. É necessário.
+Basta gerar e carregar os dados novamente através do menu.
