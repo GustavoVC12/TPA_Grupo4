@@ -21,11 +21,7 @@ public class Sistema {
         //abrir arquivo
         try {
             File arquivo = new File("entrada.txt");
-            if (arquivo.createNewFile()) {
-                System.out.println("Arquivo criado: " + arquivo.getName() + "  ME REMOVA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            } else {
-                System.out.println("Arquivo já existe.  ME REMOVA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            }
+            arquivo.createNewFile();
         } catch (IOException e) {
             System.out.println("Deu pau no carregamento");
         }
@@ -37,9 +33,10 @@ public class Sistema {
             while ((linha = leitor.readLine()) != null) {
                 String[] atributos = linha.split(";");
                 contato = new Contato(atributos[0],Long.parseLong(atributos[1]));
-                if (!contatoExiste(lista, contato)){
+                // como o gerador não entrega números repetidos, a checagem foi desabilitada
+                //if (!contatoExiste(lista, contato)){
                     lista.adicionar(contato);
-                }
+                //}
             }
             System.out.println("Lista carregada!");
         } catch (IOException e) {
@@ -48,7 +45,6 @@ public class Sistema {
         fim = Instant.now();
         System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
     }
-    // public static void excluirDados(IColecao<Contato> lista)
 
     // Adicionar contato à lista
     public static void adicionarContato(IColecao<Contato> lista) {
