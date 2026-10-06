@@ -121,6 +121,7 @@ public class Sistema {
         return false;
     }
 
+    // pesquisa geral
     public static void pesquisarContato(IColecao<Contato> lista, int tipo) {
         long inicio, fim;
         Contato contato;
@@ -162,11 +163,6 @@ public class Sistema {
             }
             return null;
         }
-        // Se for a Árvore Binária, usa o método de varredura por nome
-        else if (lista instanceof ArvoreBinaria) {
-            ArvoreBinaria<Contato> arvore = (ArvoreBinaria<Contato>) lista;
-            return arvore.pesquisarPorNome(nome);
-        }
         return null;
     }
 
@@ -175,7 +171,7 @@ public class Sistema {
         return lista.pesquisar(contato);
     }
 
-    // Pesquisa de matrícula por nome ou número
+    // pesquisa geral
     public static void pesquisarMatricula(IColecao<Matricula> arvore, int tipo) {
         Matricula matricula;
 
@@ -198,7 +194,7 @@ public class Sistema {
     public static Matricula pesquisarMatriculaPorNome(IColecao<Matricula> arvore, String nome) {
         if (arvore instanceof ArvoreBinaria) {
             ArvoreBinaria<Matricula> arvoreBinaria = (ArvoreBinaria<Matricula>) arvore;
-            return arvoreBinaria.pesquisarPorNome(nome);
+            return arvoreBinaria.pesquisarPorCondicao(m -> m.getNomeAluno().equalsIgnoreCase(nome));
         }
         return null;
     }
@@ -206,7 +202,7 @@ public class Sistema {
     public static Matricula pesquisarMatriculaPorNumero(IColecao<Matricula> arvore, int numero) {
         if (arvore instanceof ArvoreBinaria) {
             ArvoreBinaria<Matricula> arvoreBinaria = (ArvoreBinaria<Matricula>) arvore;
-            return arvoreBinaria.pesquisarPorNumero(numero);
+            return arvoreBinaria.pesquisarPorCondicao(m -> m.getNumeroMatricula() == numero);
         }
         return null;
     }
