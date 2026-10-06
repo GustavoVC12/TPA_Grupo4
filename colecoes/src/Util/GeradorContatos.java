@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GeradorDados {
+public class GeradorContatos {
 
     private static final String[] PRIMEIROS_NOMES = {
             "Ana", "Bruno", "Carla", "Daniel", "Eduarda", "Felipe", "Gabriela", "Henrique",
