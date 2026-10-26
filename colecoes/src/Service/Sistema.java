@@ -204,6 +204,8 @@ public class Sistema {
     //======================== MANIPULAÇÃO DE ARVORES ========================//
     // Carregar dados do arquivo texto
     public static void carregarContatosArvore(IColecao<Contato> arvore) {
+        Instant fim;
+        Instant inicio = Instant.now();
         File arquivo = new File("entrada.txt");
 
         try {
@@ -225,10 +227,14 @@ public class Sistema {
         } catch (IOException e) {
             System.out.println("Ocorreu um erro ao carregar a árvore...");
         }
+        fim = Instant.now();
+        System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
     }
 
     // Adicionar contato
     public static void adicionarContatoArvore(IColecao<Contato> arvore) {
+        Instant fim;
+        Instant inicio = Instant.now();
         System.out.println("======== Criando novo contato ========");
         String nome = Utilidades.lerString("Nome: ");
         long telefone = Utilidades.lerLong("Telefone: ");
@@ -240,10 +246,15 @@ public class Sistema {
             return;
         }
         System.out.println("Este número de telefone já está cadastrado.");
+
+        fim = Instant.now();
+        System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
     }
 
     // Pesquisa geral
     public static void pesquisarContatoArvore(IColecao<Contato> arvore, int tipo) {
+        Instant fim;
+        Instant inicio = Instant.now();
         Contato contato;
 
         System.out.println("======= Pesquisa de contato (Árvore) =======");
@@ -260,6 +271,8 @@ public class Sistema {
         } else {
             System.out.println("Nenhum contato encontrado.");
         }
+        fim = Instant.now();
+        System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
     }
     // Pesquisas auxiliares
     public static Contato pesquisarContatoPorNomeArvore(IColecao<Contato> arvore, String nome) {
@@ -334,17 +347,25 @@ public class Sistema {
         System.out.println("Contato não encontrado.");
     }
 
-    // Último contato
-    public static void ultimoContatoArvore(IColecao<Contato> arvore) {
+    // Contato mais distante
+    public static Contato contatoMaisLonge(IColecao<Contato> arvore) {
         if (arvore instanceof ArvoreBinaria) {
+            Instant fim;
+            Instant inicio = Instant.now();
             ArvoreBinaria<Contato> arvoreBinaria = (ArvoreBinaria<Contato>) arvore;
-            Contato ultimo = arvoreBinaria.getUlt();
+            Contato contatoMaisLonge = arvoreBinaria.getNoMaisDistante();
+            fim = Instant.now();
 
-            if (ultimo != null) {
-                System.out.println("Último contato: " + ultimo.getNome() + " - " + ultimo.getTelefone());
+            if (contatoMaisLonge != null) {
+                System.out.println("Contato mais distante da raiz: " + contatoMaisLonge.getNome() + " - " + contatoMaisLonge.getTelefone());
             } else {
                 System.out.println("A árvore está vazia.");
             }
+            System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
+            return contatoMaisLonge;
+        } else {
+            System.out.println("A coleção fornecida não é uma estrutura de árvore binária.");
+            return null;
         }
     }
 }

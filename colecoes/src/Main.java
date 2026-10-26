@@ -116,6 +116,7 @@ public class Main {
 
                 int escolha = 0;
                 boolean jaCarregado = false;
+                Resultado resultado;
 
                 while(escolha != 7){
                     System.out.println("\n====== MENU DE CONTATOS (ÁRVORE) ======\n" +
@@ -153,8 +154,13 @@ public class Main {
                             Sistema.pesquisarContatoArvore(arvore, 1);
                             break;
                         case 5:
-                            Sistema.removerContatoArvore(arvore);
-                            break;
+                            resultado = Sistema.removerContatoArvore(arvore);
+                            if (resultado.isConcluido()) {
+                                System.out.println("Contato removido com sucesso!");
+                            } else {
+                                System.out.println("Contato não encontrado. Nada foi removido.");
+                            }
+                            System.out.println("Tempo decorrido: " + resultado.getTempo() + "ms");
                         case 6:
                             Sistema.atualizarContatoArvore(arvore);
                             break;
@@ -176,7 +182,7 @@ public class Main {
                             System.out.println(contatos + " contatos gerados com sucesso.");
                             break;
                         case 10:
-                            Sistema.ultimoContatoArvore(arvore);
+                            Sistema.contatoMaisLonge(arvore);
                             break;
                         default:
                             System.out.println("Opção inválida!");
@@ -202,6 +208,7 @@ public class Main {
 
                 int escolha = 0;
                 boolean jaCarregado = false;
+                Resultado resultado;
 
                 while(escolha != 7){
                     System.out.println("\n====== MENU DE CONTATOS (ÁRVORE) ======\n" +
@@ -239,8 +246,13 @@ public class Main {
                             Sistema.pesquisarContatoArvore(arvore, 1);
                             break;
                         case 5:
-                            Sistema.removerContatoArvore(arvore);
-                            break;
+                            resultado = Sistema.removerContatoArvore(arvore);
+                            if (resultado.isConcluido()) {
+                                System.out.println("Contato removido com sucesso!");
+                            } else {
+                                System.out.println("Contato não encontrado. Nada foi removido.");
+                            }
+                            System.out.println("Tempo decorrido: " + resultado.getTempo() + "ms");
                         case 6:
                             Sistema.atualizarContatoArvore(arvore);
                             break;
@@ -262,7 +274,7 @@ public class Main {
                             System.out.println(contatos + " contatos gerados com sucesso.");
                             break;
                         case 10:
-                            Sistema.ultimoContatoArvore(arvore);
+                            Sistema.contatoMaisLonge(arvore);
                             break;
                         default:
                             System.out.println("Opção inválida!");
