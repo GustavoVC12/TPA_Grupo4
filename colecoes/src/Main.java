@@ -1,7 +1,6 @@
 import Service.Sistema;
 import Util.Utilidades;
 import Util.GeradorContatos;
-import Util.GeradorMatriculas;
 import colecao.IColecao;
 import dominio.*;
 import listaencadeada.ListaEncadeada;
@@ -16,7 +15,7 @@ public class Main {
             estrutura = Utilidades.lerInt("Qual tipo de estrutura deseja utilizar?\n" +
                     "1 - Lista Ordenada (Contatos)\n" +
                     "2 - Lista Não Ordenada (Contatos)\n" +
-                    "3 - Árvore Binária (Matrículas)\n");
+                    "3 - Árvore Binária (Contatos)");
 
             if (estrutura == 1 || estrutura == 2) {
                 IColecao<Contato> lista = new ListaEncadeada<Contato>(new ComparadorContato(), estrutura == 1);
@@ -53,20 +52,20 @@ public class Main {
                                 }
                                 lista = new ListaEncadeada<Contato>(new ComparadorContato(), estrutura == 1);
                             }
-                            Sistema.carregarDadosListas(lista);
+                            Sistema.carregarContatosLista(lista);
                             jaCarregado = true;
                             break;
                         case 2:
-                            Sistema.adicionarContato(lista);
+                            Sistema.adicionarContatoLista(lista);
                             break;
                         case 3:
-                            Sistema.pesquisarContato(lista, 0);
+                            Sistema.pesquisarContatoLista(lista, 0);
                             break;
                         case 4:
-                            Sistema.pesquisarContato(lista, 1);
+                            Sistema.pesquisarContatoLista(lista, 1);
                             break;
                         case 5:
-                            resultado = Sistema.removerContatoPorTelefone(lista);
+                            resultado = Sistema.removerContatoPorTelefoneLista(lista);
                             if (resultado.isConcluido()) {
                                 System.out.println("Contato removido com sucesso!");
                             } else {
@@ -75,7 +74,7 @@ public class Main {
                             System.out.println("Tempo decorrido: " + resultado.getTempo() + "ms");
                             break;
                         case 6:
-                            Sistema.atualizarContato(lista);
+                            Sistema.atualizarContatoLista(lista);
                             break;
                         case 7:
                             int totalContatos = lista.quantidadeNos();
@@ -86,7 +85,7 @@ public class Main {
                             break;
                         case 9:
                             int contatos = Utilidades.lerInt("Quantidade de contatos: ");
-                            GeradorContatos.gerar(contatos);
+                            GeradorContatos.gerarAleatorios(contatos);
                             break;
                         case 10:
                             Sistema.ultimoContato(lista);
@@ -102,33 +101,33 @@ public class Main {
                         "1 - Número do Contato\n" +
                         "2 - Nome do Contato\n");
 
-                Comparator<Matricula> comparador;
-                if (metIndex == 2) {
-                    comparador = ComparadorMatricula.POR_NOME;
-                    System.out.println("\n========== Árvore de Contatos indexada por NOME criada! ==========");
-                } else {
-                    comparador = ComparadorMatricula.POR_NUMERO;
+                Comparator<Contato> comparador;
+                if (metIndex == 1) {
+                    comparador = ComparadorContatoArvore.POR_TELEFONE;
                     System.out.println("\n========== Árvore de Contatos indexada por NÚMERO criada! ==========");
+                } else {
+                    comparador = ComparadorContatoArvore.POR_NOME;
+                    System.out.println("\n========== Árvore de Contatos indexada por NOME criada! ==========");
                 }
 
-                IColecao<Matricula> arvore = new ArvoreBinaria<Matricula>(comparador);
+                IColecao<Contato> arvore = new ArvoreBinaria<Contato>(comparador);
 
                 int escolha = 0;
                 boolean jaCarregado = false;
 
                 while(escolha != 7){
-                    System.out.println("\n====== MENU DE MATRÍCULAS (ÁRVORE) ======\n" +
+                    System.out.println("\n====== MENU DE CONTATOS (ÁRVORE) ======\n" +
                             "1 - Carregar dados\n" +
-                            "2 - Adicionar matrícula\n" +
-                            "3 - Pesquisar matrícula por nome\n" +
-                            "4 - Pesquisar matrícula por número\n" +
-                            "5 - Remover matrícula por número\n" +
-                            "6 - Alterar dados de matrícula\n" +
+                            "2 - Adicionar contato\n" +
+                            "3 - Pesquisar contato por nome\n" +
+                            "4 - Pesquisar contato por número\n" +
+                            "5 - Remover contato por número\n" +
+                            "6 - Alterar dados de contato\n" +
                             "7 - Sair\n" +
                             "====== Métodos para simplificar os testes ======\n" +
                             "8 - Imprimir árvore\n" +
                             "9 - Gerar dados\n" +
-                            "10 - Última matrícula");
+                            "10 - Último contato");
                     escolha = Utilidades.lerInt("Sua escolha: ");
                     switch(escolha){
                         case 1:
@@ -137,39 +136,48 @@ public class Main {
                                 if (Utilidades.lerInt("Deseja continuar? (sim=1 / não=2)") == 2) {
                                     break;
                                 }
-                                arvore = new ArvoreBinaria<Matricula>(comparador);
+                                arvore = new ArvoreBinaria<Contato>(comparador);
                             }
-                            Sistema.carregarDadosArvores(arvore);
+                            Sistema.carregarContatosArvore(arvore);
                             jaCarregado = true;
                             break;
                         case 2:
-                            Sistema.adicionarMatricula(arvore);
+                            Sistema.adicionarContatoArvore(arvore);
                             break;
                         case 3:
-                            Sistema.pesquisarMatricula(arvore, 0);
+                            Sistema.pesquisarContatoArvore(arvore, 0);
                             break;
                         case 4:
-                            Sistema.pesquisarMatricula(arvore, 1);
+                            Sistema.pesquisarContatoArvore(arvore, 1);
                             break;
                         case 5:
-                            Sistema.removerMatriculaPorNumero(arvore);
+                            Sistema.removerContatoArvore(arvore);
                             break;
                         case 6:
-                            Sistema.atualizarMatricula(arvore);
+                            Sistema.atualizarContatoArvore(arvore);
                             break;
                         case 7:
-                            int totalMatriculas = arvore.quantidadeNos();
-                            System.out.println("Matrículas salvas: " + totalMatriculas + ". Até a próxima!");
+                            System.out.println("Contatos salvos: " + arvore.quantidadeNos() + ". Até a próxima!");
                             break;
                         case 8:
                             System.out.println(arvore);
                             break;
                         case 9:
-                            int matriculas = Utilidades.lerInt("Quantidade de matrículas: ");
-                            GeradorMatriculas.gerar(matriculas);
+                            int tipo = Utilidades.lerInt("Escolha uma opção: \n" +
+                                    "1 - Contatos aleatórios\n" +
+                                    "2 - Contatos ordenados\n" +
+                                    "3 - Contatos balanceados");
+                            int contatos = Utilidades.lerInt("Quantidade de contatos: ");
+                            if (tipo == 1) GeradorContatos.gerarAleatorios(contatos);
+                            else if (tipo == 2) GeradorContatos.gerarOrdenados(contatos);
+                            else GeradorContatos.gerarBalanceados(contatos);
+                            System.out.println(contatos + " contatos gerados com sucesso.");
+                            break;
+                        case 10:
+                            Sistema.ultimoContatoArvore(arvore);
                             break;
                         default:
-                            System.out.println("Opção ainda não implementada para matrículas ou inválida!");
+                            System.out.println("Opção inválida!");
                     }
                 }
                 return;
