@@ -98,17 +98,17 @@ public class Main {
                 return;
             }
             else if (estrutura == 3) {
-                int metIndex = Utilidades.lerInt("Qual método de indexação deseja para a Árvore de Matrículas?\n" +
-                        "1 - Número da Matrícula\n" +
-                        "2 - Nome do Aluno\n");
+                int metIndex = Utilidades.lerInt("Qual método de indexação?\n" +
+                        "1 - Número do Contato\n" +
+                        "2 - Nome do Contato\n");
 
                 Comparator<Matricula> comparador;
                 if (metIndex == 2) {
                     comparador = ComparadorMatricula.POR_NOME;
-                    System.out.println("\n========== Árvore de Matrículas indexada por NOME criada! ==========");
+                    System.out.println("\n========== Árvore de Contatos indexada por NOME criada! ==========");
                 } else {
                     comparador = ComparadorMatricula.POR_NUMERO;
-                    System.out.println("\n========== Árvore de Matrículas indexada por NÚMERO criada! ==========");
+                    System.out.println("\n========== Árvore de Contatos indexada por NÚMERO criada! ==========");
                 }
 
                 IColecao<Matricula> arvore = new ArvoreBinaria<Matricula>(comparador);
