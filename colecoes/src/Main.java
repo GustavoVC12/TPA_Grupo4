@@ -208,7 +208,7 @@ public class Main {
 
                 int escolha = 0;
                 boolean jaCarregado = false;
-                Resultado resultado;
+            Resultado resultado;
 
                 while(escolha != 7){
                     System.out.println("\n====== MENU DE CONTATOS (ÁRVORE) ======\n" +
