@@ -204,14 +204,12 @@ public class Sistema {
     //======================== MANIPULAÇÃO DE ARVORES ========================//
     // Carregar dados do arquivo texto
     public static void carregarContatosArvore(IColecao<Contato> arvore) {
-        Instant fim;
-        Instant inicio = Instant.now();
+        long inicio = System.nanoTime();
         File arquivo = new File("entrada.txt");
 
-        try {
-            arquivo.createNewFile();
-        } catch (IOException e) {
-            System.out.println("Deu pau no carregamento");
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo entrada.txt não encontrado!");
+            return;
         }
 
         try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
@@ -223,12 +221,13 @@ public class Sistema {
 
                 arvore.adicionar(new Contato(nome, telefone));
             }
-            System.out.println("Árvore carregada!");
+            System.out.println("Árvore carregada com sucesso!");
         } catch (IOException e) {
             System.out.println("Ocorreu um erro ao carregar a árvore...");
         }
-        fim = Instant.now();
-        System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
+
+        long fim = System.nanoTime();
+        System.out.printf("Tempo decorrido: %.4f ms %n", (fim - inicio) / 1_000_000.0);
     }
 
     // Adicionar contato
@@ -253,8 +252,7 @@ public class Sistema {
 
     // Pesquisa geral
     public static void pesquisarContatoArvore(IColecao<Contato> arvore, int tipo) {
-        Instant fim;
-        Instant inicio = Instant.now();
+        long inicio = System.nanoTime();
         Contato contato;
 
         System.out.println("======= Pesquisa de contato (Árvore) =======");
@@ -266,19 +264,31 @@ public class Sistema {
             contato = pesquisarContatoPorTelefoneArvore(arvore, telefone);
         }
 
+        long fim = System.nanoTime();
+
         if (contato != null) {
             System.out.println("Correspondência encontrada: " + contato.getNome() + " - " + contato.getTelefone());
         } else {
             System.out.println("Nenhum contato encontrado.");
         }
-        fim = Instant.now();
-        System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
+
+        System.out.printf("Tempo decorrido: %.4f ms %n", (fim - inicio) / 1_000_000.0);
     }
     // Pesquisas auxiliares
     public static Contato pesquisarContatoPorNomeArvore(IColecao<Contato> arvore, String nome) {
         if (arvore instanceof ArvoreBinaria) {
-            ArvoreBinaria<Contato> arvoreBinaria = (ArvoreBinaria<Contato>) arvore;
-            return arvoreBinaria.pesquisarPorCondicao(c -> c.getNome().equalsIgnoreCase(nome));
+            ArvoreBinaria<Contato> aux = (ArvoreBinaria<Contato>) arvore;
+
+            // 1. Tenta a busca binária direta O(log n) caso a árvore esteja indexada por NOME
+            Contato busca = new Contato(nome, 0);
+            Contato resultadoBuscaBinaria = arvore.pesquisar(busca);
+
+            if (resultadoBuscaBinaria != null) {
+                return resultadoBuscaBinaria;
+            }
+
+            // 2. Fallback: Varredura BFS O(n) caso a árvore esteja indexada por TELEFONE
+            return aux.pesquisarPorCondicao(c -> c.getNome().equalsIgnoreCase(nome));
         }
         return null;
     }
@@ -286,8 +296,11 @@ public class Sistema {
         if (arvore instanceof ArvoreBinaria) {
             ArvoreBinaria<Contato> aux = (ArvoreBinaria<Contato>) arvore;
 
-            // Se a árvore estiver indexada por telefone, usa a busca binária rápida O(log n)
-            // Caso contrário, usa a varredura por condição O(n)
+            if (aux.quantidadeNos() == 0) {
+                return null;
+            }
+
+            // 1. Tenta a busca binária direta O(log n) caso a árvore esteja indexada por TELEFONE
             Contato busca = new Contato("", telefone);
             Contato resultadoBuscaBinaria = arvore.pesquisar(busca);
 
@@ -295,7 +308,7 @@ public class Sistema {
                 return resultadoBuscaBinaria;
             }
 
-            // Fallback para varredura completa caso a árvore esteja indexada por nome
+            // 2. Fallback: Varredura BFS O(n) apenas se a árvore estiver indexada por NOME
             return aux.pesquisarPorCondicao(c -> c.getTelefone() == telefone);
         }
         return null;
@@ -305,14 +318,22 @@ public class Sistema {
     public static Resultado removerContatoArvore(IColecao<Contato> arvore) {
         long telefoneRemover = Utilidades.lerLong("Telefone do contato a ser removido: ");
 
-        Instant inicio = Instant.now();
-        Contato contatoEncontrado = pesquisarContatoPorTelefoneArvore(arvore, telefoneRemover);
-        boolean removido = false;
+        long inicio = System.nanoTime();
 
-        if (contatoEncontrado != null) {
-            removido = arvore.remover(contatoEncontrado);
+        // 1. Tenta a remoção direta em 1 única passagem O(log n) caso a árvore esteja indexada por TELEFONE
+        Contato busca = new Contato("", telefoneRemover);
+        boolean removido = arvore.remover(busca);
+
+        // 2. Fallback: Se a remoção direta falhou (ex: árvore indexada por NOME), localiza primeiro o objeto e remove
+        if (!removido) {
+            Contato contatoEncontrado = pesquisarContatoPorTelefoneArvore(arvore, telefoneRemover);
+            if (contatoEncontrado != null) {
+                removido = arvore.remover(contatoEncontrado);
+            }
         }
-        Instant fim = Instant.now();
+
+        long fim = System.nanoTime();
+        double duracaoMs = (fim - inicio) / 1_000_000.0;
 
         if (removido) {
             System.out.println("Contato removido com sucesso!");
@@ -320,7 +341,9 @@ public class Sistema {
             System.out.println("Contato não encontrado ou erro ao remover.");
         }
 
-        return new Resultado(removido, Duration.between(inicio, fim).toMillis());
+        System.out.printf("Tempo decorrido: %.4f ms %n", duracaoMs);
+
+        return new Resultado(removido, (long) duracaoMs);
     }
     public static void removerContatoArvore(IColecao<Contato> arvore, Contato contato) {
         if (contato != null) {
@@ -350,18 +373,18 @@ public class Sistema {
     // Contato mais distante
     public static Contato contatoMaisLonge(IColecao<Contato> arvore) {
         if (arvore instanceof ArvoreBinaria) {
-            Instant fim;
-            Instant inicio = Instant.now();
+            long inicio = System.nanoTime();
             ArvoreBinaria<Contato> arvoreBinaria = (ArvoreBinaria<Contato>) arvore;
             Contato contatoMaisLonge = arvoreBinaria.getNoMaisDistante();
-            fim = Instant.now();
+            long fim = System.nanoTime();
 
             if (contatoMaisLonge != null) {
                 System.out.println("Contato mais distante da raiz: " + contatoMaisLonge.getNome() + " - " + contatoMaisLonge.getTelefone());
             } else {
                 System.out.println("A árvore está vazia.");
             }
-            System.out.println("Tempo decorrido: " + Duration.between(inicio,fim).toMillis() + "ms");
+
+            System.out.printf("Tempo decorrido: %.4f ms %n", (fim - inicio) / 1_000_000.0);
             return contatoMaisLonge;
         } else {
             System.out.println("A coleção fornecida não é uma estrutura de árvore binária.");
